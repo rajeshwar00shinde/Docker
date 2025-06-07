@@ -1,0 +1,64 @@
+mkdir zephyr && cd zephyr
+vi Dockerfile //add contents 
+docker build -t zephyr-os .
+
+##
+docker run --name zephyr-dev -it -v $(pwd):/workdir -w /workdir zephyr-os
+--name zephyr-dev: 
+
+Assigns the name zephyr-dev to your container for easy reference.
+-it: Enables interactive mode with a terminal.
+-v $(pwd):/workdir: Mounts your current directory to /workdir inside the container.
+-w /workdir: Sets the working directory inside the container to /workdir.
+
+##
+Commit the Container to a New Image
+After making the desired changes, exit the container and commit it to a new image:
+
+sh
+Copy
+Edit
+docker commit zephyr-dev zephyr-dev-image
+zephyr-dev: The name of your running container.
+zephyr-dev-image: The name you want to assign to the new image.
+
+##
+Save the Image to a Tarball (Optional)
+If you want to save the image as a tarball for easy distribution or storage:
+
+sh
+Copy
+Edit
+docker save -o zephyr-dev-image.tar zephyr-dev-image
+
+##
+Load the Image on Another System (If Applicable)
+To use the image on a different system, transfer the tarball and load it:
+
+sh
+Copy
+Edit
+docker load -i zephyr-dev-image.tar
+
+##
+Run a New Container from the Saved Image
+Start a new container from your saved image:
+
+sh
+Copy
+Edit
+docker run --name zephyr-dev -it -v $(pwd):/workdir -w /workdir zephyr-dev-image
+
+##
+Copy from PC to docker session
+
+docker cp zephyrproject/zephyr-sdk-0.13.2-linux-x86_64-setup.run 5d279750c401:/workdir/zephyrproject
+
+##
+docker ps
+
+##
+Run existing container
+
+docker start zephyr-dev
+docker attach zephyr-dev
